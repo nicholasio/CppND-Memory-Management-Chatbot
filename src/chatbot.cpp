@@ -45,6 +45,73 @@ ChatBot::~ChatBot()
 //// STUDENT CODE
 ////
 
+
+ChatBot::ChatBot(const ChatBot &source) {
+    std::cout << "Chatbot copy constructor" << std::endl;
+
+    // copy pointers (not owned)
+    _chatLogic = source._chatLogic;
+    _rootNode = source._rootNode;
+    
+    // deep copy of owned resouces
+    _image = new wxBitmap(*source._image);
+}
+
+ChatBot& ChatBot::operator=(const ChatBot &source) {
+    std::cout << "Chatbot copy assignment operator" << std::endl;
+
+    if(this == &source) {
+        return *this;
+    }
+
+    // copy pointers (not owned)
+    _chatLogic = source._chatLogic;
+    _rootNode = source._rootNode;
+
+    // deep copy of owned resouces
+    _image = new wxBitmap(*source._image);
+
+    return *this;
+}
+
+ChatBot::ChatBot(ChatBot &&source) {
+    std::cout << "Chatbot move constructor" << std::endl;
+
+    // move everything
+    _chatLogic = source._chatLogic;
+    _rootNode = source._rootNode;
+    _image = source._image;
+
+    // update pointer to Chatbot in _chatLogic
+    _chatLogic->SetChatbotHandle(this);
+
+    source._chatLogic = nullptr;
+    source._rootNode = nullptr;
+    source._image = nullptr;
+}
+
+ChatBot& ChatBot::operator=(ChatBot &&source) {
+    std::cout << "Chatbot move assignment" << std::endl;
+
+    if(this == &source) {
+        return *this;
+    }
+
+     // move everything
+    _chatLogic = source._chatLogic;
+    _rootNode = source._rootNode;
+    _image = source._image;
+
+    // update pointer to Chatbot in _chatLogic
+    _chatLogic->SetChatbotHandle(this);
+
+    source._chatLogic = nullptr;
+    source._rootNode = nullptr;
+    source._image = nullptr;
+
+    return *this;
+}
+
 ////
 //// EOF STUDENT CODE
 
